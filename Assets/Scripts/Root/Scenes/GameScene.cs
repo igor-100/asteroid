@@ -2,6 +2,7 @@
 using Core;
 using Gameplay.Player;
 using UnityEngine;
+using Utils;
 namespace Gameplay
 {
     public class GameScene : MonoBehaviour
@@ -13,11 +14,11 @@ namespace Gameplay
             var camera = CompositionRoot.GetGameCamera();
             var ship = CompositionRoot.GetShip();
             playerController = CompositionRoot.GetPlayerController();
-            PlayerMono playerMono = CompositionRoot.GetShipMono();
-            ship.Init(playerMono);
+            var playerMono = CompositionRoot.GetShipMono();
+            var configuration = CompositionRoot.GetConfiguration();
+            ship.Init(playerMono, configuration.PlayerProperties);
             playerController.SetPlayer(ship);
             playerController.SetCamera(camera.MainCamera);
-            
             playerController.IsEnabled = true;
         }
     }

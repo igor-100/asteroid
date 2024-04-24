@@ -1,7 +1,7 @@
-﻿namespace Gameplay
+﻿using UnityEngine;
+namespace Gameplay
 {
-    public class Gameplay
+    public class Gameplay : MonoBehaviour
     {
-        
     }
 }

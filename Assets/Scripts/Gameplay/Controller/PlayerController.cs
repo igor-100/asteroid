@@ -1,8 +1,8 @@
 ﻿using Constants;
-using Core.Camera;
 using Gameplay.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 namespace Gameplay
 {
     public class PlayerController : MonoBehaviour, IPlayerController

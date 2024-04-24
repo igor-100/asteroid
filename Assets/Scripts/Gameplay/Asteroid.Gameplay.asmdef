@@ -1,0 +1,20 @@
+{
+    "name": "Asteroid.Gameplay",
+    "rootNamespace": "Asteroid.Gameplay",
+    "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:eafb33c04fb545deb90e3e2186505e8b",
+        "GUID:23421be09e704a49a79ba897b28a6061",
+        "GUID:514a21bdb462aab4a964916b6ee1b71b",
+        "GUID:fbb18df4225746d588ba1663efbb86f3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

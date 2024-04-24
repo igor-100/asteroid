@@ -1,14 +1,14 @@
-﻿using Core;
+﻿using Configurations.Properties;
 using UnityEngine;
 namespace Gameplay.Player
 {
     public class Ship : IPlayer
     {
-        private readonly float increaseSpeedAcceleration;
-        private readonly float decreaseSpeedAcceleration;
-        private readonly float rotationAcceleration;
-        private readonly float inertiaAcceleration;
-        private readonly float maximumSpeed;
+        private float increaseSpeedAcceleration;
+        private float decreaseSpeedAcceleration;
+        private float rotationAcceleration;
+        private float inertiaAcceleration;
+        private float maximumSpeed;
 
         private PlayerMono mono;
         
@@ -18,21 +18,16 @@ namespace Gameplay.Player
         private Vector2 inertiaDirection;
         private float rotationAngle;
 
-        public Ship()
+        public void Init(PlayerMono playerMono, PlayerProperties playerProps)
         {
-            var playerProps = CompositionRoot.GetConfiguration().PlayerProperties;
+            this.mono = playerMono;
+            coordinates = Vector2.zero;
+            lookDirection = Vector2.up;
             increaseSpeedAcceleration = playerProps.IncreaseSpeedAcceleration;
             maximumSpeed = playerProps.MaximumSpeed;
             decreaseSpeedAcceleration = playerProps.DecreaseSpeedAcceleration;
             rotationAcceleration = playerProps.RotationAcceleration;
             inertiaAcceleration = playerProps.InertiaAcceleration;
-        }
-
-        public void Init(PlayerMono playerMono)
-        {
-            this.mono = playerMono;
-            coordinates = Vector2.zero;
-            lookDirection = Vector2.up;
         }
         
         public void IncreaseSpeed()

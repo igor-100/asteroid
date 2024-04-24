@@ -1,5 +1,4 @@
-﻿using Core.Camera;
-using Gameplay.Player;
+﻿using Gameplay.Player;
 using UnityEngine;
 namespace Gameplay
 {

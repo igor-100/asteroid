@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using Configurations.Properties;
+using UnityEngine;
 namespace Gameplay.Player
 {
     public interface IPlayer
     {
-        void Init(PlayerMono playerMono);
+        void Init(PlayerMono playerMono, PlayerProperties configurationPlayerProperties);
         
         void IncreaseSpeed();
         void DecreaseSpeed();
