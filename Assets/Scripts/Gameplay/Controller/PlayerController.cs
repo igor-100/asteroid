@@ -1,4 +1,6 @@
 ﻿using Constants;
+using Core.Camera;
+using Gameplay.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 namespace Gameplay
@@ -9,30 +11,51 @@ namespace Gameplay
         private PlayerInput playerInput;
         
         private InputAction moveAction;
+        private IPlayer player;
+        private InputAction lookAction;
+        private Camera gameCamera;
+
+        public bool IsEnabled { get; set; }
+        
+        public void SetPlayer(IPlayer player)
+        {
+            this.player = player;
+        }
+        
+        public void SetCamera(Camera gameCamera)
+        {
+            this.gameCamera = gameCamera;
+        }
 
         private void Awake()
         {
             moveAction = playerInput.actions.FindAction(InputActionConstants.MOVE);
-            moveAction.started += OnInputMovement_Started;
-            moveAction.canceled += OnInputMovement_Canceled;
-            
+            lookAction = playerInput.actions.FindAction(InputActionConstants.LOOK);
         }
 
         private void Update()
         {
-            if (moveAction.IsInProgress())
-            {
-                // Debug.Log("in progress");
-            }
+            if (!IsEnabled || player == null)
+                return;
+
+            ProcessMove();
+            ProcessLook();
         }
 
-        public void OnInputMovement_Started(InputAction.CallbackContext value)
+        private void ProcessMove()
         {
-            Debug.Log($"space started");
+            if (moveAction.IsPressed())
+                player.IncreaseSpeed();
+            else
+                player.DecreaseSpeed();
         }
-        private void OnInputMovement_Canceled(InputAction.CallbackContext obj)
+        
+        private void ProcessLook()
         {
-            Debug.Log($"space canceled");
+            var lookVector = lookAction.ReadValue<Vector2>();
+            var worldPos = gameCamera.ScreenToWorldPoint(lookVector);
+            var lookPos = new Vector2(worldPos.x, worldPos.y);
+            player.LookAt(lookPos);
         }
     }
 }

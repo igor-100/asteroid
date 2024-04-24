@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 150563723245138357}
   - component: {fileID: 9150239989412262534}
   m_Layer: 0
-  m_Name: OrthoCamera
+  m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

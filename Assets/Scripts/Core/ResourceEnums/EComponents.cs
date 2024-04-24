@@ -3,6 +3,8 @@ namespace Core.ResourceEnums
     public enum EComponents
     {
         SceneLoader,
-        UIRoot
+        UIRoot,
+        PlayerController,
+        Camera
     }
 }

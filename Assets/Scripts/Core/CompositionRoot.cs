@@ -1,77 +1,114 @@
 ﻿using Configurations;
+using Core.Camera;
 using Core.ResourceEnums;
 using Gameplay;
+using Gameplay.Player;
 using UI;
 using UnityEngine;
+using Utils;
 namespace Core
 {
     public class CompositionRoot : MonoBehaviour
     {
-        private static IUIRoot UIRoot;
-        private static IViewFactory ViewFactory;
-        private static ISceneLoader SceneLoader;
-        private static IResourceManager ResourceManager;
-        private static IConfiguration Configuration;
-        private static IPlayerController PlayerController;
-        private static IOldInput oldInput;
+        private static IUIRoot uiRoot;
+        private static IViewFactory viewFactory;
+        private static ISceneLoader sceneLoader;
+        private static IResourceManager resourceManager;
+        private static IConfiguration configuration;
+        private static IPlayerController playerController;
+        private static IPlayer ship;
+        private static IOrthoCamera gameCamera;
+        private static PlayerMono shipMono;
 
         private void OnDestroy()
         {
-            Configuration = null;
-            UIRoot = null;
-            ViewFactory = null;
+            configuration = null;
+            uiRoot = null;
+            viewFactory = null;
+            playerController = null;
+            ship = null;
 
-            var resourceManager = GetResourceManager();
-            resourceManager.ResetPools();
+            var resManager = GetResourceManager();
+            resManager.ResetPools();
         }
 
         public static IResourceManager GetResourceManager()
         {
-            return ResourceManager ??= new ResourceManager();
+            return resourceManager ??= new ResourceManager();
         }
 
         public static ISceneLoader GetSceneLoader()
         {
-            if (SceneLoader == null)
+            if (sceneLoader == null)
             {
-                var resourceManager = GetResourceManager();
-                SceneLoader = resourceManager.CreatePrefabInstance<ISceneLoader, EComponents>(EComponents.SceneLoader);
+                var resManager = GetResourceManager();
+                sceneLoader = resManager.CreatePrefabInstance<ISceneLoader, EComponents>(EComponents.SceneLoader);
             }
 
-            return SceneLoader;
+            return sceneLoader;
+        }
+
+        public static IOrthoCamera GetGameCamera()
+        {
+            if (gameCamera == null)
+            {
+                var resManager = GetResourceManager();
+                gameCamera = resManager.CreatePrefabInstance<IOrthoCamera, EComponents>(EComponents.Camera);
+            }
+
+            return gameCamera;
         }
 
         public static IConfiguration GetConfiguration()
         {
-            return Configuration ??= new Configuration();
+            return configuration ??= new Configuration();
         }
 
         public static IUIRoot GetUIRoot()
         {
-            if (UIRoot == null)
+            if (uiRoot == null)
             {
-                var resourceManager = GetResourceManager();
-                UIRoot = resourceManager.CreatePrefabInstance<IUIRoot, EComponents>(EComponents.UIRoot);
+                var resManager = GetResourceManager();
+                uiRoot = resManager.CreatePrefabInstance<IUIRoot, EComponents>(EComponents.UIRoot);
             }
 
-            return UIRoot;
+            return uiRoot;
         }
 
         public static IViewFactory GetViewFactory()
         {
-            if (ViewFactory == null)
+            if (viewFactory == null)
             {
-                var uiRoot = GetUIRoot();
-                var resourceManager = GetResourceManager();
+                var root = GetUIRoot();
+                var resManager = GetResourceManager();
 
-                ViewFactory = new ViewFactory(uiRoot, resourceManager);
+                viewFactory = new ViewFactory(root, resManager);
             }
 
-            return ViewFactory;
+            return viewFactory;
         }
 
-        public static IPlayerController GetPlayerController() => PlayerController ??= new PlayerController();
-
-        public static IOldInput GetPlayerInput() => oldInput ??= new OldInput();
+        public static IPlayerController GetPlayerController()
+        {
+            if (playerController == null)
+            {
+                var resManager = GetResourceManager();
+                playerController =
+                    resManager.CreatePrefabInstance<PlayerController, EComponents>(EComponents.PlayerController);
+            }
+            
+            return playerController;
+        }
+        public static IPlayer GetShip() => ship ??= new Ship();
+        public static PlayerMono GetShipMono()
+        {
+            if (shipMono == null)
+            {
+                var resManager = GetResourceManager();
+                shipMono = resManager.CreatePrefabInstance<PlayerMono, EPlayers>(EPlayers.Ship);
+            }
+            
+            return shipMono;
+        }
     }
 }
