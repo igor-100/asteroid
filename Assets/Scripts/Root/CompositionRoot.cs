@@ -1,11 +1,8 @@
 ﻿using Configurations;
 using Core.Camera;
 using Core.ResourceEnums;
-using Gameplay;
-using Gameplay.Player;
 using UI;
 using UnityEngine;
-using Utils;
 namespace Core
 {
     public class CompositionRoot : MonoBehaviour
@@ -15,18 +12,13 @@ namespace Core
         private static ISceneLoader sceneLoader;
         private static IResourceManager resourceManager;
         private static IConfiguration configuration;
-        private static IPlayerController playerController;
-        private static IPlayer ship;
         private static IOrthoCamera gameCamera;
-        private static PlayerMono shipMono;
 
         private void OnDestroy()
         {
             configuration = null;
             uiRoot = null;
             viewFactory = null;
-            playerController = null;
-            ship = null;
 
             var resManager = GetResourceManager();
             resManager.ResetPools();
@@ -86,29 +78,6 @@ namespace Core
             }
 
             return viewFactory;
-        }
-
-        public static IPlayerController GetPlayerController()
-        {
-            if (playerController == null)
-            {
-                var resManager = GetResourceManager();
-                playerController =
-                    resManager.CreatePrefabInstance<PlayerController, EComponents>(EComponents.PlayerController);
-            }
-            
-            return playerController;
-        }
-        public static IPlayer GetShip() => ship ??= new Ship();
-        public static PlayerMono GetShipMono()
-        {
-            if (shipMono == null)
-            {
-                var resManager = GetResourceManager();
-                shipMono = resManager.CreatePrefabInstance<PlayerMono, EPlayers>(EPlayers.Ship);
-            }
-            
-            return shipMono;
         }
     }
 }
