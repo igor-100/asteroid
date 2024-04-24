@@ -1,5 +1,6 @@
 ﻿using Configurations;
 using Core.ResourceEnums;
+using Gameplay;
 using UI;
 using UnityEngine;
 namespace Core
@@ -11,6 +12,8 @@ namespace Core
         private static ISceneLoader SceneLoader;
         private static IResourceManager ResourceManager;
         private static IConfiguration Configuration;
+        private static IPlayerController PlayerController;
+        private static IOldInput oldInput;
 
         private void OnDestroy()
         {
@@ -25,7 +28,6 @@ namespace Core
         public static IResourceManager GetResourceManager()
         {
             return ResourceManager ??= new ResourceManager();
-
         }
 
         public static ISceneLoader GetSceneLoader()
@@ -67,5 +69,9 @@ namespace Core
 
             return ViewFactory;
         }
+
+        public static IPlayerController GetPlayerController() => PlayerController ??= new PlayerController();
+
+        public static IOldInput GetPlayerInput() => oldInput ??= new OldInput();
     }
 }
