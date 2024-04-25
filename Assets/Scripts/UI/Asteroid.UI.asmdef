@@ -2,7 +2,8 @@
     "name": "Asteroid.UI",
     "rootNamespace": "Asteroid.UI",
     "references": [
-        "GUID:fbb18df4225746d588ba1663efbb86f3"
+        "GUID:fbb18df4225746d588ba1663efbb86f3",
+        "GUID:eafb33c04fb545deb90e3e2186505e8b"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

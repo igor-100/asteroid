@@ -1,8 +1,10 @@
-﻿using Configurations;
+﻿using Asteroid.Core.Updater;
+using Configurations;
 using Core.Camera;
 using Core.ResourceEnums;
 using UI;
 using UnityEngine;
+using Utils;
 namespace Core
 {
     public class CompositionRoot : MonoBehaviour
@@ -13,12 +15,14 @@ namespace Core
         private static IResourceManager resourceManager;
         private static IConfiguration configuration;
         private static IOrthoCamera gameCamera;
+        private static IUpdater updater;
 
         private void OnDestroy()
         {
             configuration = null;
             uiRoot = null;
             viewFactory = null;
+            updater = null;
 
             var resManager = GetResourceManager();
             resManager.ResetPools();
@@ -54,6 +58,11 @@ namespace Core
         public static IConfiguration GetConfiguration()
         {
             return configuration ??= new Configuration();
+        }
+
+        public static IUpdater GetUpdater()
+        {
+            return updater ??= MonoExtensions.CreateComponent<Updater>();
         }
 
         public static IUIRoot GetUIRoot()

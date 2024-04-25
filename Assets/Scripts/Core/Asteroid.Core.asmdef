@@ -1,7 +1,9 @@
 {
     "name": "Asteroid.Core",
     "rootNamespace": "Asteroid.Core",
-    "references": [],
+    "references": [
+        "GUID:eafb33c04fb545deb90e3e2186505e8b"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

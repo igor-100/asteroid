@@ -13,7 +13,8 @@ namespace Gameplay
         private IPlayer player;
         private InputAction lookAction;
         private Camera gameCamera;
-        private InputAction attackAction;
+        private InputAction attack1Action;
+        private InputAction attack2Action;
 
         public bool IsEnabled { get; set; }
         
@@ -31,8 +32,10 @@ namespace Gameplay
         {
             moveAction = playerInput.actions.FindAction(InputActionConstants.MOVE);
             lookAction = playerInput.actions.FindAction(InputActionConstants.LOOK);
-            attackAction = playerInput.actions.FindAction(InputActionConstants.ATTACK);
-            attackAction.performed += OnAttackActionPerformed;
+            attack1Action = playerInput.actions.FindAction(InputActionConstants.ATTACK1);
+            attack2Action = playerInput.actions.FindAction(InputActionConstants.ATTACK2);
+            attack1Action.performed += OnAttack1ActionPerformed;
+            attack2Action.performed += OnAttack2ActionPerformed;
         }
 
         private void Update()
@@ -60,15 +63,16 @@ namespace Gameplay
             player.LookAt(lookPos);
         }
         
-        private void OnAttackActionPerformed(InputAction.CallbackContext obj)
-        {
-            player.TryFire();
-        }
+        private void OnAttack1ActionPerformed(InputAction.CallbackContext obj) => player.TryFireAttack1();
+
+        private void OnAttack2ActionPerformed(InputAction.CallbackContext obj) => player.TryFireAttack2();
 
         private void OnDestroy()
         {
-            if (attackAction != null)
-                attackAction.performed -= OnAttackActionPerformed;
+            if (attack1Action != null)
+                attack1Action.performed -= OnAttack1ActionPerformed;
+            if (attack2Action != null)
+                attack2Action.performed -= OnAttack2ActionPerformed;
         }
     }
 }

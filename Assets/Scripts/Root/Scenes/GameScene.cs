@@ -11,11 +11,13 @@ namespace Gameplay
         
         private void Awake()
         {
-            var camera = CompositionRoot.GetGameCamera();
+            var gameCamera = CompositionRoot.GetGameCamera();
             var configuration = CompositionRoot.GetConfiguration();
-            var gameplay = MonoExtensions.CreateComponent<Gameplay>();
             var resourceManager = CompositionRoot.GetResourceManager();
-            gameplay.Init(resourceManager, configuration, camera);
+            var updater = CompositionRoot.GetUpdater();
+            
+            var gameplay = new GameplayRoot();
+            gameplay.Init(resourceManager, configuration, gameCamera, updater);
         }
     }
 }

@@ -4,7 +4,7 @@ using Asteroid.Gameplay.Player;
 using UnityEngine;
 namespace Gameplay
 {
-    public interface IGameplay
+    public interface IGameplayRoot
     {
         void Init(IResourceManager resourceManager);
     }

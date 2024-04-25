@@ -10,7 +10,7 @@ namespace Asteroid.Gameplay.Projectiles
         
         private float speed;
 
-        public event Action Collided = () => { };
+        public event Action<Collider2D> Collided = (col) => { };
 
         public void Launch(Vector2 coordinates, float speed, float angle)
         {
@@ -22,9 +22,7 @@ namespace Asteroid.Gameplay.Projectiles
         
         private void TriggerColliderOnEventEntered(Collider2D col)
         {
-            if (col.CompareTag("Player") || col.CompareTag("Projectile"))
-                return;
-            Collided();
+            Collided(col);
         }
 
         private void Update()

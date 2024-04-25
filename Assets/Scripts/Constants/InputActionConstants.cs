@@ -4,6 +4,7 @@
     {
         public const string MOVE = "Move";
         public const string LOOK = "Look";
-        public const string ATTACK = "Attack";
+        public const string ATTACK1 = "Attack1";
+        public const string ATTACK2 = "Attack2";
     }
 }
