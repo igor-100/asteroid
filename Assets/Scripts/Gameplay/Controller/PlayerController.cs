@@ -1,8 +1,7 @@
-﻿using Constants;
-using Gameplay.Player;
+﻿using Asteroid.Gameplay.Player;
+using Constants;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
 namespace Gameplay
 {
     public class PlayerController : MonoBehaviour, IPlayerController
@@ -14,6 +13,7 @@ namespace Gameplay
         private IPlayer player;
         private InputAction lookAction;
         private Camera gameCamera;
+        private InputAction attackAction;
 
         public bool IsEnabled { get; set; }
         
@@ -31,6 +31,8 @@ namespace Gameplay
         {
             moveAction = playerInput.actions.FindAction(InputActionConstants.MOVE);
             lookAction = playerInput.actions.FindAction(InputActionConstants.LOOK);
+            attackAction = playerInput.actions.FindAction(InputActionConstants.ATTACK);
+            attackAction.performed += OnAttackActionPerformed;
         }
 
         private void Update()
@@ -56,6 +58,17 @@ namespace Gameplay
             var worldPos = gameCamera.ScreenToWorldPoint(lookVector);
             var lookPos = new Vector2(worldPos.x, worldPos.y);
             player.LookAt(lookPos);
+        }
+        
+        private void OnAttackActionPerformed(InputAction.CallbackContext obj)
+        {
+            player.TryFire();
+        }
+
+        private void OnDestroy()
+        {
+            if (attackAction != null)
+                attackAction.performed -= OnAttackActionPerformed;
         }
     }
 }

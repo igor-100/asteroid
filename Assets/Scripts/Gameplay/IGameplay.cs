@@ -1,6 +1,6 @@
 ﻿using Core;
 using Core.ResourceEnums;
-using Gameplay.Player;
+using Asteroid.Gameplay.Player;
 using UnityEngine;
 namespace Gameplay
 {

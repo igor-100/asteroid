@@ -1,6 +1,6 @@
 ﻿using System;
 using Core;
-using Gameplay.Player;
+using Asteroid.Gameplay.Player;
 using UnityEngine;
 using Utils;
 namespace Gameplay
