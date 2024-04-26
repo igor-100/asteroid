@@ -48,13 +48,16 @@ namespace Gameplay.Level.Enemies
             enemyMono.Init(this.Coordinates, rotationAngle, this);
         }
 
-        private void MonoOnCollided(Collider2D col)
+        private void MonoOnCollided(Collider2D col, IHittable hittable)
         {
-            if (col.CompareTag(TagConstants.ENEMY))
-                return;
-            if (!col.CompareTag(TagConstants.DESTROY_BORDERS))
-                return;
-            GotHit(this, false, EHitTypes.Destroy);
+            if (col.CompareTag(TagConstants.DESTROY_BORDERS))
+            {
+                GotHit(this, false, EHitTypes.Destroy);
+            }
+            else if (col.CompareTag(TagConstants.PLAYER))
+            {
+                hittable?.Hit(EHitTypes.Destroy);
+            }
         }
 
         private void UpdaterOnDestroyed()

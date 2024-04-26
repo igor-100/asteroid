@@ -34,6 +34,9 @@ namespace Asteroid.Gameplay.Player
             var configuration = GameplayRoot.Configuration;
             
             this.mono = playerMono;
+            mono.Init(this);
+            mono.gameObject.SetActive(true);
+            
             var playerProps = configuration.PlayerProperties;
             weaponModule1 = new(playerProps.Weapon1, configuration.GetWeapon(playerProps.Weapon1));
             weaponModule2 = new(playerProps.Weapon2, configuration.GetWeapon(playerProps.Weapon2));

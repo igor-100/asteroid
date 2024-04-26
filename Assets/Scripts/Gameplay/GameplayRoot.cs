@@ -2,7 +2,6 @@
 using Configurations;
 using Core;
 using Core.Camera;
-using Gameplay.Level;
 namespace Gameplay
 {
     public class GameplayRoot
@@ -19,9 +18,6 @@ namespace Gameplay
             GameplayRoot.Updater = updater;
             GameplayRoot.Configuration = configuration;
             GameplayRoot.OrthoCamera = orthoCamera;
-            
-            IGameManager gameManager = new GameManager();
-            gameManager.Init();
         }
     }
 }

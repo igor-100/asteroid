@@ -8,12 +8,10 @@ namespace Gameplay.Level.Enemies
     {
         [SerializeField]
         private TriggerCollider triggerCollider;
-        [SerializeField]
-        private SpriteRenderer spriteRenderer;
         
         private float speed;
 
-        public event Action<Collider2D> Collided = (col) => { };
+        public event Action<Collider2D, IHittable> Collided = (col, hittable) => { };
 
         public void Init(Vector2 coordinates, float angle, IHittable hittable)
         {
@@ -28,15 +26,9 @@ namespace Gameplay.Level.Enemies
             transform.position = newPosition;
         }
         
-        public void UpdateVisualRotation(float angle)
-        {
-            triggerCollider.transform.rotation = Quaternion.Euler(0, 0, angle);
-            spriteRenderer.transform.rotation = Quaternion.Euler(0, 0, angle);
-        }
-        
         private void TriggerColliderOnEventEntered(Collider2D col, IHittable hittable)
         {
-            Collided(col);
+            Collided(col, hittable);
         }
 
         private void OnDisable()

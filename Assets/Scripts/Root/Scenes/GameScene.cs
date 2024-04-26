@@ -1,6 +1,7 @@
 ﻿using System;
 using Core;
 using Asteroid.Gameplay.Player;
+using Gameplay.Level;
 using UnityEngine;
 using Utils;
 namespace Gameplay
@@ -18,6 +19,9 @@ namespace Gameplay
             
             var gameplay = new GameplayRoot();
             gameplay.Init(resourceManager, configuration, gameCamera, updater);
+            
+            IGameManager gameManager = new GameManager();
+            gameManager.Init();
         }
     }
 }

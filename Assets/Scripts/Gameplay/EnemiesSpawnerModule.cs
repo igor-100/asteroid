@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Asteroid.Configurations.ResourceEnums;
 using Asteroid.Gameplay.Player;
 using Configurations.Properties;
@@ -12,7 +13,9 @@ namespace Gameplay.Level
 {
     public class EnemiesSpawnerModule
     {
-        public bool IsEnabled { get; set; }
+        private bool isEnabled;
+
+        private List<IEnemy> aliveEnemies;
         
         private EdgeCollider2D spawnEdges;
         private Bounds gameBounds;
@@ -29,6 +32,7 @@ namespace Gameplay.Level
         private List<EEnemies> enemiesPossibilityList;
         private IPlayer player;
         private IReadOnlyDictionary<EEnemies,EnemyProperties> enemiesProperites;
+        private CancellationTokenSource cancellationTokenSource;
 
         public void Init(LevelProperties levelProperties, IReadOnlyDictionary<EEnemies, EnemyProperties> enemiesProperties,
             EdgeCollider2D spawnEdges, Bounds gameBounds, IPlayer player)
@@ -64,16 +68,17 @@ namespace Gameplay.Level
 
             minSpawnDelay = initialSpawnDelay.min;
             maxSpawnDelay = initialSpawnDelay.max;
+            aliveEnemies = new();
 
-            IsEnabled = true;
+            isEnabled = true;
             SpawnEnemies().Forget();
         }
 
         private async UniTaskVoid SpawnEnemies()
         {
-            while (IsEnabled)
+            cancellationTokenSource = new CancellationTokenSource();
+            while (isEnabled)
             {
-                await UniTask.Delay((int)(Random.Range(minSpawnDelay, maxSpawnDelay) * 1000));
                 SpawnRandomEnemy();
                 spawnedEnemiesCounter++;
                 if (spawnedEnemiesCounter <= levelProperties.TotalSpawnsToGetToTheFinalLevel)
@@ -81,6 +86,8 @@ namespace Gameplay.Level
                     minSpawnDelay -= minDelayDecrease;
                     maxSpawnDelay -= maxDelayDecrease;   
                 }
+                await UniTask.Delay((int)(Random.Range(minSpawnDelay, maxSpawnDelay) * 1000),
+                    cancellationToken: cancellationTokenSource.Token);
             }
         }
         
@@ -116,9 +123,11 @@ namespace Gameplay.Level
                 direction = specifiedDirection != default ? specifiedDirection : (targetPoint - spawnPoint).normalized;
             }
             
-            var enemyEnemy = enemiesPool.Spawn();
-            enemyEnemy.Init(eEnemy, spawnPoint, speed, rotation, direction, playerToFollow);
-            enemyEnemy.GotHit += EnemyOnDestroyed;
+            var enemy = enemiesPool.Spawn();
+            enemy.Init(eEnemy, spawnPoint, speed, rotation, direction, playerToFollow);
+            enemy.GotHit += EnemyOnDestroyed;
+            
+            aliveEnemies.Add(enemy);
         }
 
         private void EnemyOnDestroyed(IEnemy enemy, bool isByPlayer, EHitTypes hitType)
@@ -131,6 +140,19 @@ namespace Gameplay.Level
             }
             enemy.GotHit -= EnemyOnDestroyed;
             enemiesPool.Despawn(enemy);
+            aliveEnemies.Remove(enemy);
+        }
+        
+        public void Disable()
+        {
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource.Dispose();
+            for (var index = aliveEnemies.Count - 1; index >= 0; index--)
+            {
+                var enemy = aliveEnemies[index];
+                enemy.Hit(EHitTypes.Destroy);
+            }
+            isEnabled = false;
         }
 
         private static Vector2 GetRandomPointInBounds2D(Bounds bounds) {
