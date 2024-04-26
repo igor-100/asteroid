@@ -5,6 +5,7 @@ namespace Core.ResourceEnums
         SceneLoader,
         UIRoot,
         PlayerController,
-        Camera
+        Camera,
+        UiPlayerInput
     }
 }

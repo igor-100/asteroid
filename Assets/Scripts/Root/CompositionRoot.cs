@@ -1,8 +1,10 @@
 ﻿using Asteroid.Core.Updater;
+using Asteroid.UI.Controller;
 using Configurations;
 using Core.Camera;
 using Core.ResourceEnums;
 using UI;
+using UI.Pause;
 using UnityEngine;
 using Utils;
 namespace Core
@@ -17,12 +19,18 @@ namespace Core
         private static IOrthoCamera gameCamera;
         private static IUpdater updater;
 
+        private static IPauseScreen pauseScreen;
+        private static IUiPlayerInput uiPlayerInput;
+
         private void OnDestroy()
         {
             configuration = null;
             uiRoot = null;
             viewFactory = null;
             updater = null;
+            gameCamera = null;
+            pauseScreen = null;
+            uiPlayerInput = null;
 
             var resManager = GetResourceManager();
             resManager.ResetPools();
@@ -75,7 +83,7 @@ namespace Core
 
             return uiRoot;
         }
-
+        
         public static IViewFactory GetViewFactory()
         {
             if (viewFactory == null)
@@ -87,6 +95,28 @@ namespace Core
             }
 
             return viewFactory;
+        }
+
+        public static IPauseScreen GetPauseScreen()
+        {
+            if (pauseScreen == null)
+            {
+                pauseScreen = MonoExtensions.CreateComponent<PauseScreen>();
+                pauseScreen.Init(GetUiPlayerInput(), GetSceneLoader(), GetViewFactory());
+            }
+            
+            return pauseScreen;
+        }
+
+        public static IUiPlayerInput GetUiPlayerInput()
+        {
+            if (uiPlayerInput == null)
+            {
+                var resManager = GetResourceManager();
+                uiPlayerInput = resManager.CreatePrefabInstance<IUiPlayerInput, EComponents>(EComponents.UiPlayerInput);
+            }
+            
+            return uiPlayerInput;
         }
     }
 }

@@ -1,9 +1,6 @@
-﻿using System;
-using Core;
-using Asteroid.Gameplay.Player;
+﻿using Core;
 using Gameplay.Level;
 using UnityEngine;
-using Utils;
 namespace Gameplay
 {
     public class GameScene : MonoBehaviour
@@ -16,9 +13,10 @@ namespace Gameplay
             var configuration = CompositionRoot.GetConfiguration();
             var resourceManager = CompositionRoot.GetResourceManager();
             var updater = CompositionRoot.GetUpdater();
+            var pauseScreen = CompositionRoot.GetPauseScreen();
             
             var gameplay = new GameplayRoot();
-            gameplay.Init(resourceManager, configuration, gameCamera, updater);
+            gameplay.Init(resourceManager, configuration, gameCamera, updater, pauseScreen);
             
             IGameManager gameManager = new GameManager();
             gameManager.Init();

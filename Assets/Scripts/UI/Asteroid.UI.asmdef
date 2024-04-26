@@ -3,7 +3,11 @@
     "rootNamespace": "Asteroid.UI",
     "references": [
         "GUID:fbb18df4225746d588ba1663efbb86f3",
-        "GUID:eafb33c04fb545deb90e3e2186505e8b"
+        "GUID:eafb33c04fb545deb90e3e2186505e8b",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:23421be09e704a49a79ba897b28a6061",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

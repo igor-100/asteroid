@@ -11,7 +11,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 namespace Gameplay.Level
 {
-    public class EnemiesSpawnerModule
+    public class EnemiesManagerModule
     {
         private bool isEnabled;
 
@@ -33,6 +33,8 @@ namespace Gameplay.Level
         private IPlayer player;
         private IReadOnlyDictionary<EEnemies,EnemyProperties> enemiesProperites;
         private CancellationTokenSource cancellationTokenSource;
+
+        public event Action<IEnemy> EnemyHit = (enemy) => { };
 
         public void Init(LevelProperties levelProperties, IReadOnlyDictionary<EEnemies, EnemyProperties> enemiesProperties,
             EdgeCollider2D spawnEdges, Bounds gameBounds, IPlayer player)
@@ -125,12 +127,12 @@ namespace Gameplay.Level
             
             var enemy = enemiesPool.Spawn();
             enemy.Init(eEnemy, spawnPoint, speed, rotation, direction, playerToFollow);
-            enemy.GotHit += EnemyOnDestroyed;
+            enemy.GotHit += EnemyOnHit;
             
             aliveEnemies.Add(enemy);
         }
 
-        private void EnemyOnDestroyed(IEnemy enemy, bool isByPlayer, EHitTypes hitType)
+        private void EnemyOnHit(IEnemy enemy, bool isByPlayer, EHitTypes hitType)
         {
             if (enemy.EType == EEnemies.BigAsteroid && hitType == EHitTypes.Hit)
             {
@@ -138,7 +140,8 @@ namespace Gameplay.Level
                 SpawnEnemy(EEnemies.SmallAsteroid, enemy.Coordinates, firstDir);
                 SpawnEnemy(EEnemies.SmallAsteroid, enemy.Coordinates, -firstDir);
             }
-            enemy.GotHit -= EnemyOnDestroyed;
+            EnemyHit(enemy);
+            enemy.GotHit -= EnemyOnHit;
             enemiesPool.Despawn(enemy);
             aliveEnemies.Remove(enemy);
         }
