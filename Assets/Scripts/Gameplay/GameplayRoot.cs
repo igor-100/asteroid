@@ -1,9 +1,7 @@
 ﻿using Asteroid.Core.Updater;
-using Asteroid.Gameplay.Player;
 using Configurations;
 using Core;
 using Core.Camera;
-using Core.ResourceEnums;
 using Gameplay.Level;
 namespace Gameplay
 {
@@ -12,30 +10,18 @@ namespace Gameplay
         public static IUpdater Updater { get; private set; }
         public static IConfiguration Configuration { get; private set; }
         public static IResourceManager ResourceManager { get; private set; }
+        public static IOrthoCamera OrthoCamera { get; private set; }
         
-        private IPlayerController playerController;
-        private IPlayer player;
-        private PlayerMono shipMono;
-
         public void Init(IResourceManager resourceManager, IConfiguration configuration, IOrthoCamera orthoCamera,
             IUpdater updater)
         {
             GameplayRoot.ResourceManager = resourceManager;
             GameplayRoot.Updater = updater;
             GameplayRoot.Configuration = configuration;
+            GameplayRoot.OrthoCamera = orthoCamera;
             
-            player = new Ship();
-            playerController =
-                GameplayRoot.ResourceManager.CreatePrefabInstance<PlayerController, EComponents>(EComponents.PlayerController);
-            shipMono = resourceManager.CreatePrefabInstance<PlayerMono, EPlayers>(EPlayers.Ship);
-            
-            player.Init(shipMono);
-            playerController.SetPlayer(player);
-            playerController.SetCamera(orthoCamera.MainCamera);
-            playerController.IsEnabled = true;
-            
-            ILevelManager levelManager = new LevelManager();
-            levelManager.Init(player);
+            IGameManager gameManager = new GameManager();
+            gameManager.Init();
         }
     }
 }

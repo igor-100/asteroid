@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2261079955724954485}
   - component: {fileID: 3996022378946935830}
   m_Layer: 8
-  m_Name: SmallAsteroid
+  m_Name: Ufo
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,7 +121,7 @@ SpriteRenderer:
   m_SortingLayerID: -1257959853
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 867753954, guid: 255c37a1811de41498f134f9630fe666, type: 3}
+  m_Sprite: {fileID: -1981851035, guid: 255c37a1811de41498f134f9630fe666, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -194,11 +194,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9068107242442932388, guid: 032485e903bf388409ce297046809f54, type: 3}
       propertyPath: m_Size.x
-      value: 0.6
+      value: 0.72
       objectReference: {fileID: 0}
     - target: {fileID: 9068107242442932388, guid: 032485e903bf388409ce297046809f54, type: 3}
       propertyPath: m_Size.y
-      value: 0.6
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

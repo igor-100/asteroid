@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   triggerCollider: {fileID: 2092686494187404135}
+  spriteRenderer: {fileID: 2208187320102766081}
 --- !u!1 &5747659608320719661
 GameObject:
   m_ObjectHideFlags: 0

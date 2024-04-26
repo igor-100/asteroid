@@ -6,6 +6,8 @@ namespace Asteroid.Gameplay.Player
 {
     public class Ship : IPlayer
     {
+        public Vector2 Coordinates { get; private set; }
+        
         private PlayerMono mono;
         
         private float increaseSpeedAcceleration;
@@ -18,7 +20,6 @@ namespace Asteroid.Gameplay.Player
         private WeaponModule weaponModule2;
         
         private float currentSpeed;
-        private Vector2 coordinates;
         private Vector2 lookDirection;
         private Vector2 inertiaDirection;
         private float rotationAngle;
@@ -37,7 +38,7 @@ namespace Asteroid.Gameplay.Player
             weaponModule1 = new(playerProps.Weapon1, configuration.GetWeapon(playerProps.Weapon1));
             weaponModule2 = new(playerProps.Weapon2, configuration.GetWeapon(playerProps.Weapon2));
             
-            coordinates = Vector2.zero;
+            Coordinates = Vector2.zero;
             lookDirection = Vector2.up;
             increaseSpeedAcceleration = playerProps.IncreaseSpeedAcceleration;
             maximumSpeed = playerProps.MaximumSpeed;
@@ -69,7 +70,7 @@ namespace Asteroid.Gameplay.Player
         private void UpdatePosition()
         {
             var coordinatesDelta = inertiaDirection * currentSpeed;
-            var newCoordinates = coordinates + coordinatesDelta;
+            var newCoordinates = Coordinates + coordinatesDelta;
             if (!bounds.Contains(newCoordinates))
             {
                 if (newCoordinates.x > boundsX)
@@ -86,20 +87,20 @@ namespace Asteroid.Gameplay.Player
                     return;
                 }
             }
-            coordinates = newCoordinates;
-            mono.UpdateCoordinates(coordinates);
+            Coordinates = newCoordinates;
+            mono.UpdateCoordinates(Coordinates);
         }
         
         public void LookAt(Vector2 lookPos)
         {
-            var targetDirection = (lookPos - coordinates).normalized;
+            var targetDirection = (lookPos - Coordinates).normalized;
             lookDirection = Vector2.Lerp(lookDirection, targetDirection, rotationAcceleration).normalized;
             rotationAngle = Vector2.SignedAngle(Vector2.up, lookDirection);
             mono.UpdateRotation(rotationAngle);
         }
         
-        public void TryFireAttack1() => weaponModule1.TryFire(coordinates, rotationAngle, lookDirection);
-        public void TryFireAttack2() => weaponModule2.TryFire(coordinates, rotationAngle, lookDirection);
+        public void TryFireAttack1() => weaponModule1.TryFire(Coordinates, rotationAngle, lookDirection);
+        public void TryFireAttack2() => weaponModule2.TryFire(Coordinates, rotationAngle, lookDirection);
 
         public void Hit(EHitTypes hitTypes)
         {

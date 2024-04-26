@@ -226,12 +226,12 @@ TextureImporter:
       name: asteroids-2x_11
       rect:
         serializedVersion: 2
-        x: 412
-        y: 83
-        width: 100
-        height: 79
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 411
+        y: 77
+        width: 101
+        height: 85
+      alignment: 9
+      pivot: {x: 0.5377076, y: 0.47439584}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

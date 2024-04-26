@@ -1,8 +1,8 @@
 ﻿using Asteroid.Gameplay.Player;
 namespace Gameplay.Level
 {
-    public interface ILevelManager
+    public interface IGameManager
     {
-        void Init(IPlayer player);
+        void Init();
     }
 }

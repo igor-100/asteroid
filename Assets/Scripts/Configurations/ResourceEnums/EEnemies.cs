@@ -4,5 +4,6 @@
     {
         BigAsteroid,
         SmallAsteroid,
+        Ufo
     }
 }

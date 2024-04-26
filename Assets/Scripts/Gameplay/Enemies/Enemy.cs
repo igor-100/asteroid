@@ -1,28 +1,31 @@
 ﻿using System;
 using Asteroid.Configurations.ResourceEnums;
 using Asteroid.Core.Updater;
+using Asteroid.Gameplay.Player;
 using Configurations.Properties;
 using Constants;
 using Core;
 using UnityEngine;
 namespace Gameplay.Level.Enemies
 {
-    public class AsteroidEnemy : IAsteroidEnemy
+    public class Enemy : IEnemy
     {
+        public EEnemies EType { get; private set; }
+        public Vector2 Coordinates { get; private set; }
+        
         private EnemyMono enemyMono;
         private readonly IUpdater updater;
         private readonly IResourceManager resourceManager;
         private bool isActive;
-        private Vector2 coordinates;
+        
         private float speed;
         private Vector2 movementDirection;
         private float rotationAngle;
+        private IPlayer playerToFollow;
 
-        private EState state; 
-        
-        public event Action<IAsteroidEnemy, bool> Destroyed = (ast, isByPlayer) => { };
+        public event Action<IEnemy, bool, EHitTypes> GotHit = (ast, isByPlayer, hitType) => { };
 
-        public AsteroidEnemy()
+        public Enemy()
         {
             updater = GameplayRoot.Updater;
             resourceManager = GameplayRoot.ResourceManager;
@@ -30,25 +33,28 @@ namespace Gameplay.Level.Enemies
             updater.Destroyed += UpdaterOnDestroyed;
         }
 
-        public void Init(EEnemies eEnemies, Vector2 coordinates, float speed, float rotationAgle, Vector2 movementDirection)
+        public void Init(EEnemies eEnemies, Vector2 coordinates, float speed, float rotationAngle,
+            Vector2 movementDirection = default, IPlayer playerToFollow = null)
         {
-            this.coordinates = coordinates;
+            this.EType = eEnemies;
+            this.Coordinates = coordinates;
             this.speed = speed;
-            this.rotationAngle = rotationAgle;
+            this.rotationAngle = rotationAngle;
+            this.playerToFollow = playerToFollow;
             this.movementDirection = movementDirection;
             
             enemyMono = resourceManager.GetPooledObject<EnemyMono, EEnemies>(eEnemies);
             enemyMono.Collided += MonoOnCollided;
-            enemyMono.Init(this.coordinates, rotationAgle, this);
+            enemyMono.Init(this.Coordinates, rotationAngle, this);
         }
-        
+
         private void MonoOnCollided(Collider2D col)
         {
             if (col.CompareTag(TagConstants.ENEMY))
                 return;
             if (!col.CompareTag(TagConstants.DESTROY_BORDERS))
                 return;
-            Destroyed(this, false);
+            GotHit(this, false, EHitTypes.Destroy);
         }
 
         private void UpdaterOnDestroyed()
@@ -67,22 +73,16 @@ namespace Gameplay.Level.Enemies
         
         private void ProcessMove(float deltaTime)
         {
-            coordinates += speed * deltaTime * movementDirection;
-            enemyMono.UpdateCoordinates(coordinates);
+            if (playerToFollow != null)
+                movementDirection = (playerToFollow.Coordinates - Coordinates).normalized;
+            
+            Coordinates += speed * deltaTime * movementDirection;
+            enemyMono.UpdateCoordinates(Coordinates);
         }
 
         public void Hit(EHitTypes hitTypes)
         {
-            Destroyed(this, true);
-            // switch (hitTypes)
-            // {
-            //     case EHitTypes.Hit:
-            //         break;
-            //     case EHitTypes.Destroy:
-            //         break;
-            //     default:
-            //         throw new ArgumentOutOfRangeException(nameof(hitTypes), hitTypes, null);
-            // }
+            GotHit(this, true, hitTypes);
         }
         
         public void OnSpawned() => isActive = true;
@@ -91,13 +91,6 @@ namespace Gameplay.Level.Enemies
             enemyMono.Collided -= MonoOnCollided;
             enemyMono.gameObject.SetActive(false);
             isActive = false;
-        }
-
-        enum EState
-        {
-            Big,
-            Small,
-            Inactive,
         }
     }
 }

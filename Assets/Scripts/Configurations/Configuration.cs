@@ -1,14 +1,19 @@
 ﻿using System.Collections.Generic;
+using Asteroid.Configurations.ResourceEnums;
 using Configurations.Properties;
 using Core.ResourceEnums;
 namespace Configurations
 {
+    //TODO: turn it into json, scriptable object or whatever you need
     public class Configuration : IConfiguration
     {
         private readonly Dictionary<EWeapon, WeaponProperties> weapons;
+        private readonly Dictionary<EEnemies, EnemyProperties> enemies;
         public PlayerProperties PlayerProperties { get; }
         public LevelProperties LevelProperties { get; }
         public WeaponProperties GetWeapon(EWeapon weapon) => weapons[weapon];
+        public EnemyProperties GetEnemy(EEnemies eEnemies) => enemies[eEnemies];
+        public IReadOnlyDictionary<EEnemies, EnemyProperties> Enemies => enemies;
 
         public Configuration()
         {
@@ -22,6 +27,17 @@ namespace Configurations
                 
                 Weapon1 = EWeapon.Gun,
                 Weapon2 = EWeapon.Laser,
+            };
+            LevelProperties = new LevelProperties()
+            {
+                LevelPrefab = ELevels.Level1,
+                EnemiesToSpawn = new()
+                {
+                    (EEnemies.Ufo, 1), (EEnemies.BigAsteroid, 5),
+                },
+                InitialSpawnDelay = (2f, 4f),
+                TotalSpawnsToGetToTheFinalLevel = 100,
+                FinalSpawnDelay = (0.5f, 1f)
             };
 
             weapons = new()
@@ -47,6 +63,33 @@ namespace Configurations
                         
                         IsToDisappearAfterTime = true,
                         DisappearTime = 1f,
+                    }
+                },
+            };
+            enemies = new()
+            {
+                {
+                    EEnemies.SmallAsteroid, new()
+                    {
+                        Speed = 3f,
+                        IsRotatedRandomly = true,
+                        IsFollowingPlayer = false,
+                    }
+                },
+                {
+                    EEnemies.BigAsteroid, new()
+                    {
+                        Speed = 2f,
+                        IsRotatedRandomly = true,
+                        IsFollowingPlayer = false,
+                    }
+                },
+                {
+                    EEnemies.Ufo, new()
+                    {
+                        Speed = 2f,
+                        IsRotatedRandomly = false,
+                        IsFollowingPlayer = true,
                     }
                 },
             };

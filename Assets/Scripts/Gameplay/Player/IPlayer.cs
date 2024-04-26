@@ -4,6 +4,8 @@ namespace Asteroid.Gameplay.Player
 {
     public interface IPlayer : IHittable
     {
+        Vector2 Coordinates { get; }
+        
         event Action Died;
         
         void Init(PlayerMono playerMono);

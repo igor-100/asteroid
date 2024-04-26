@@ -8,7 +8,6 @@ TagManager:
   - Laser
   - Enemy
   - DestroyBorders
-  - TeleportBorders
   layers:
   - Default
   - TransparentFX
