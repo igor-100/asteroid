@@ -6,6 +6,7 @@ namespace Core.ResourceEnums
         UIRoot,
         PlayerController,
         Camera,
-        UiPlayerInput
+        UiPlayerInput,
+        EventSystem
     }
 }

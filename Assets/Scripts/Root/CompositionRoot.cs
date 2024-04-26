@@ -7,6 +7,7 @@ using Core.ResourceEnums;
 using UI;
 using UI.Pause;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Utils;
 namespace Core
 {
@@ -19,6 +20,7 @@ namespace Core
         private static IConfiguration configuration;
         private static IOrthoCamera gameCamera;
         private static IUpdater updater;
+        private static EventSystem eventSystem;
 
         private static IPauseScreen pauseScreen;
         private static IGameplayHud gameplayHud;
@@ -34,6 +36,7 @@ namespace Core
             pauseScreen = null;
             gameplayHud = null;
             uiPlayerInput = null;
+            eventSystem = null;
 
             var resManager = GetResourceManager();
             resManager.ResetPools();
@@ -53,6 +56,17 @@ namespace Core
             }
 
             return sceneLoader;
+        }
+
+        public static EventSystem GetEventSystem()
+        {
+            if (eventSystem == null)
+            {
+                var resourceManager = GetResourceManager();
+                eventSystem = resourceManager.CreatePrefabInstance<EventSystem, EComponents>(EComponents.EventSystem);
+            }
+
+            return eventSystem;
         }
 
         public static IOrthoCamera GetGameCamera()
