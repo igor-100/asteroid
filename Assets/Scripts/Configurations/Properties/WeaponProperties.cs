@@ -3,9 +3,10 @@ namespace Configurations.Properties
 {
     public class WeaponProperties
     {
-        public EProjectiles ProjectileType;
+        public EProjectiles ProjectilePrefab;
         public float ProjectileSpeed;
         public float CooldownBetweenShotsTime;
+        public EHitTypes HitType; 
         
         public bool IsEndless;
         public int AmmoSize;
@@ -19,5 +20,11 @@ namespace Configurations.Properties
     {
         Gun,
         Laser
+    }
+
+    public enum EHitTypes
+    {
+        Hit,
+        Destroy,
     }
 }

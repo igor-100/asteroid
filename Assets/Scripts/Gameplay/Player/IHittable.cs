@@ -1,7 +1,8 @@
+using Configurations.Properties;
 namespace Asteroid.Gameplay.Player
 {
     public interface IHittable
     {
-        void Hit();
+        void Hit(EHitTypes hitTypes);
     }
 }

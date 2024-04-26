@@ -1,9 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 namespace Asteroid.Gameplay.Player
 {
-    public interface IPlayer : IHittable 
+    public interface IPlayer : IHittable
     {
+        event Action Died;
+        
         void Init(PlayerMono playerMono);
+        void SetMovementBorders(Bounds bounds);
 
         void IncreaseSpeed();
         void DecreaseSpeed();

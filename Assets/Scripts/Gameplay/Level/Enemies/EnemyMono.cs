@@ -2,21 +2,24 @@
 using Asteroid.Gameplay.Player;
 using Gameplay.Trigger;
 using UnityEngine;
-namespace Asteroid.Gameplay.Projectiles
+namespace Gameplay.Level.Enemies
 {
-    public class ProjectileMono : MonoBehaviour
+    public class EnemyMono : MonoBehaviour
     {
         [SerializeField]
         private TriggerCollider triggerCollider;
+        [SerializeField]
+        private SpriteRenderer spriteRenderer;
         
         private float speed;
 
-        public event Action<Collider2D, IHittable> Collided = (col, hittable) => { };
+        public event Action<Collider2D> Collided = (col) => { };
 
-        public void Init(Vector2 coordinates, float angle)
+        public void Init(Vector2 coordinates, float angle, IHittable hittable)
         {
             UpdateCoordinates(coordinates);
             this.transform.rotation = Quaternion.Euler(0, 0, angle);
+            triggerCollider.Hittable = hittable;
             triggerCollider.EventEntered += TriggerColliderOnEventEntered;
         }
         
@@ -25,9 +28,15 @@ namespace Asteroid.Gameplay.Projectiles
             transform.position = newPosition;
         }
         
+        public void UpdateVisualRotation(float angle)
+        {
+            triggerCollider.transform.rotation = Quaternion.Euler(0, 0, angle);
+            spriteRenderer.transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
+        
         private void TriggerColliderOnEventEntered(Collider2D col, IHittable hittable)
         {
-            Collided(col, hittable);
+            Collided(col);
         }
 
         private void OnDisable()

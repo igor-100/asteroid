@@ -7,15 +7,16 @@ namespace Configurations
     {
         private readonly Dictionary<EWeapon, WeaponProperties> weapons;
         public PlayerProperties PlayerProperties { get; }
+        public LevelProperties LevelProperties { get; }
         public WeaponProperties GetWeapon(EWeapon weapon) => weapons[weapon];
 
         public Configuration()
         {
             PlayerProperties = new PlayerProperties()
             {
-                IncreaseSpeedAcceleration = 0.005f,
-                DecreaseSpeedAcceleration = 0.01f,
-                MaximumSpeed = 0.02f,
+                IncreaseSpeedAcceleration = 0.006f,
+                DecreaseSpeedAcceleration = 0.003f,
+                MaximumSpeed = 0.03f,
                 RotationAcceleration = 0.03f,
                 InertiaAcceleration = 0.03f,
                 
@@ -28,16 +29,18 @@ namespace Configurations
                 {
                     EWeapon.Gun, new()
                     {
-                        ProjectileType = EProjectiles.Bullet,
+                        ProjectilePrefab = EProjectiles.Bullet,
+                        HitType = EHitTypes.Hit,
                         CooldownBetweenShotsTime = 0.3f,
-                        ProjectileSpeed = 5f,
+                        ProjectileSpeed = 15f,
                         IsEndless = true,
                     }
                 },
                 {
                     EWeapon.Laser, new()
                     {
-                        ProjectileType = EProjectiles.Laser,
+                        ProjectilePrefab = EProjectiles.Laser,
+                        HitType = EHitTypes.Destroy,
                         
                         AmmoSize = 1,
                         ReloadTime = 7f,

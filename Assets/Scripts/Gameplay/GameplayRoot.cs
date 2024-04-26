@@ -4,9 +4,7 @@ using Configurations;
 using Core;
 using Core.Camera;
 using Core.ResourceEnums;
-using UnityEngine;
-using Utils;
-
+using Gameplay.Level;
 namespace Gameplay
 {
     public class GameplayRoot
@@ -35,6 +33,9 @@ namespace Gameplay
             playerController.SetPlayer(player);
             playerController.SetCamera(orthoCamera.MainCamera);
             playerController.IsEnabled = true;
+            
+            ILevelManager levelManager = new LevelManager();
+            levelManager.Init(player);
         }
     }
 }

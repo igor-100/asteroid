@@ -69,22 +69,22 @@ namespace Asteroid.Gameplay.Player
             }
         }
 
-        public void TryFire(Vector2 coordinates, float rotationAngle)
+        public void TryFire(Vector2 coordinates, float rotationAngle, Vector2 lookDirection)
         {
             if (gunState == EGunState.ReadyToFire)
             {
-                Fire(coordinates, rotationAngle);
+                Fire(coordinates, rotationAngle, lookDirection);
             }
         }
         
-        private void Fire(Vector2 coordinates, float rotationAngle)
+        private void Fire(Vector2 coordinates, float rotationAngle, Vector2 lookDirection)
         {
             var projectile = projectilesPool.Spawn();
             float disappearTime = 0f;
             if (weaponProperties.IsToDisappearAfterTime)
                 disappearTime = weaponProperties.DisappearTime;
-            projectile.Init(weaponProperties.ProjectileType, coordinates, weaponProperties.ProjectileSpeed,
-                rotationAngle, disappearTime);
+            projectile.Init(weaponProperties.ProjectilePrefab, weaponProperties.HitType, coordinates, weaponProperties.ProjectileSpeed,
+                rotationAngle, lookDirection, disappearTime);
             projectile.Finished += ProjectileOnFinished;
             if (!isEndless)
             {

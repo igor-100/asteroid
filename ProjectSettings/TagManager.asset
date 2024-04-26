@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Projectile
+  - Laser
+  - Enemy
+  - DestroyBorders
+  - TeleportBorders
   layers:
   - Default
   - TransparentFX
@@ -45,9 +49,6 @@ TagManager:
   - name: Background
     uniqueID: 2787269439
     locked: 0
-  - name: Asteroids
-    uniqueID: 1037860001
-    locked: 0
   - name: Enemies
     uniqueID: 3037007443
     locked: 0
@@ -56,4 +57,7 @@ TagManager:
     locked: 0
   - name: Bullets
     uniqueID: 2857923233
+    locked: 0
+  - name: Player
+    uniqueID: 3435301347
     locked: 0

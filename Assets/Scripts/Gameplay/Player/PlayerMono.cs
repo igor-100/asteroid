@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 namespace Asteroid.Gameplay.Player
 {
     public class PlayerMono : MonoBehaviour

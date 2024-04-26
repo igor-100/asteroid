@@ -1,4 +1,5 @@
 ﻿using System;
+using Configurations.Properties;
 using Core;
 using Core.ResourceEnums;
 using Gameplay.Pool;
@@ -9,7 +10,8 @@ namespace Asteroid.Gameplay.Projectiles
     {
         event Action<IProjectile> Finished;
 
-        void Init(EProjectiles eProjectiles, Vector2 coordinates, float speed, float angle,
-            float disappearTime = 0f);
+        void Init(EProjectiles eProjectiles, EHitTypes hitType, Vector2 coordinates, float speed,
+            float angle,
+            Vector2 lookDirection, float disappearTime = 0f);
     }
 }

@@ -1,4 +1,6 @@
-﻿using Gameplay;
+﻿using System;
+using Configurations.Properties;
+using Gameplay;
 using UnityEngine;
 namespace Asteroid.Gameplay.Player
 {
@@ -20,6 +22,11 @@ namespace Asteroid.Gameplay.Player
         private Vector2 lookDirection;
         private Vector2 inertiaDirection;
         private float rotationAngle;
+        private Bounds bounds;
+        private float boundsX;
+        private float boundsY;
+
+        public event Action Died = () => { };
 
         public void Init(PlayerMono playerMono)
         {
@@ -39,6 +46,13 @@ namespace Asteroid.Gameplay.Player
             inertiaAcceleration = playerProps.InertiaAcceleration;
         }
 
+        public void SetMovementBorders(Bounds bounds)
+        {
+            this.bounds = bounds;
+            boundsX = bounds.extents.x;
+            boundsY = bounds.extents.y;
+        }
+
         public void IncreaseSpeed()
         {
             currentSpeed = Mathf.Lerp(currentSpeed, maximumSpeed, increaseSpeedAcceleration);
@@ -55,7 +69,24 @@ namespace Asteroid.Gameplay.Player
         private void UpdatePosition()
         {
             var coordinatesDelta = inertiaDirection * currentSpeed;
-            coordinates += coordinatesDelta;
+            var newCoordinates = coordinates + coordinatesDelta;
+            if (!bounds.Contains(newCoordinates))
+            {
+                if (newCoordinates.x > boundsX)
+                    newCoordinates.x = -boundsX;
+                else if (newCoordinates.y > boundsY)
+                    newCoordinates.y = -boundsY;
+                else if (newCoordinates.x < -boundsX)
+                    newCoordinates.x = boundsX;
+                else if (newCoordinates.y < -boundsY)
+                    newCoordinates.y = boundsY;
+                else
+                {
+                    Debug.LogError("Smth unpredictable happened. Point is inside of bounds");
+                    return;
+                }
+            }
+            coordinates = newCoordinates;
             mono.UpdateCoordinates(coordinates);
         }
         
@@ -67,12 +98,13 @@ namespace Asteroid.Gameplay.Player
             mono.UpdateRotation(rotationAngle);
         }
         
-        public void TryFireAttack1() => weaponModule1.TryFire(coordinates, rotationAngle);
-        public void TryFireAttack2() => weaponModule2.TryFire(coordinates, rotationAngle);
+        public void TryFireAttack1() => weaponModule1.TryFire(coordinates, rotationAngle, lookDirection);
+        public void TryFireAttack2() => weaponModule2.TryFire(coordinates, rotationAngle, lookDirection);
 
-        public void Hit()
+        public void Hit(EHitTypes hitTypes)
         {
             mono.gameObject.SetActive(false);
+            Died();
         }
     }
 }

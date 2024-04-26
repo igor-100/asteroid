@@ -118,7 +118,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1437044063
-  m_SortingLayer: 5
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -961385802, guid: 255c37a1811de41498f134f9630fe666, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -190,10 +190,6 @@ PrefabInstance:
     - target: {fileID: 3787901121143485269, guid: 032485e903bf388409ce297046809f54, type: 3}
       propertyPath: m_TagString
       value: Projectile
-      objectReference: {fileID: 0}
-    - target: {fileID: 9068107242442932388, guid: 032485e903bf388409ce297046809f54, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
