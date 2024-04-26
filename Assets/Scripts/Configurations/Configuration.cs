@@ -49,7 +49,6 @@ namespace Configurations
                         HitType = EHitTypes.Hit,
                         CooldownBetweenShotsTime = 0.3f,
                         ProjectileSpeed = 15f,
-                        IsEndless = true,
                     }
                 },
                 {
@@ -58,11 +57,12 @@ namespace Configurations
                         ProjectilePrefab = EProjectiles.Laser,
                         HitType = EHitTypes.Destroy,
                         
-                        AmmoSize = 1,
+                        AmmoSize = 3,
+                        CooldownBetweenShotsTime = 0.5f,
                         ReloadTime = 7f,
+                        ProjectileSpeed = 10f,
                         
-                        IsToDisappearAfterTime = true,
-                        DisappearTime = 1f,
+                        CannotBeDestroyed = true,
                     }
                 },
             };

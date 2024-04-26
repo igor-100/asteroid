@@ -63,9 +63,19 @@ namespace Gameplay
             player.LookAt(lookPos);
         }
         
-        private void OnAttack1ActionPerformed(InputAction.CallbackContext obj) => player.TryFireAttack1();
+        private void OnAttack1ActionPerformed(InputAction.CallbackContext obj)
+        {
+            if (!IsEnabled)
+                return;
+            player.TryFireAttack1();
+        }
 
-        private void OnAttack2ActionPerformed(InputAction.CallbackContext obj) => player.TryFireAttack2();
+        private void OnAttack2ActionPerformed(InputAction.CallbackContext obj)
+        {
+            if (!IsEnabled)
+                return;
+            player.TryFireAttack2();
+        }
 
         private void OnDestroy()
         {

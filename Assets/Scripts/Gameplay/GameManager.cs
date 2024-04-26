@@ -1,4 +1,6 @@
+using Asteroid.Core.Updater;
 using Asteroid.Gameplay.Player;
+using Asteroid.UI.GameplayHud;
 using Configurations;
 using Core.ResourceEnums;
 using Cysharp.Threading.Tasks;
@@ -16,6 +18,8 @@ namespace Gameplay.Level
         private IPauseScreen pauseScreen;
         private PlayerController playerController;
         private int currentScore;
+        private IUpdater updater;
+        private IGameplayHud hud;
 
         public void Init()
         {
@@ -23,7 +27,9 @@ namespace Gameplay.Level
             var orthoCamera = GameplayRoot.OrthoCamera;
             configuration = GameplayRoot.Configuration;
             pauseScreen = GameplayRoot.PauseScreen;
-            
+            updater = GameplayRoot.Updater;
+            hud = GameplayRoot.GameplayHud;
+
             player = new Ship();
             playerController =
                 GameplayRoot.ResourceManager.CreatePrefabInstance<PlayerController, EComponents>(EComponents.PlayerController);
@@ -48,7 +54,28 @@ namespace Gameplay.Level
             enemiesManager.EnemyHit += EnemiesManagerOnEnemyHit;
             pauseScreen.Paused += PauseScreenOnPaused;
             pauseScreen.Unpaused += PauseScreenOnUnpaused;
-            pauseScreen.BeforeRestartHappened += BeforeRestartHappened;
+            updater.Updated += UpdaterOnUpdated;
+            updater.Destroyed += UpdaterOnDestroyed;
+        }
+
+        private void UpdaterOnDestroyed()
+        {
+            enemiesManager.Disable();
+            enemiesManager.EnemyHit -= EnemiesManagerOnEnemyHit;
+            pauseScreen.Paused -= PauseScreenOnPaused;
+            pauseScreen.Unpaused -= PauseScreenOnUnpaused;
+            updater.Updated -= UpdaterOnUpdated;
+            updater.Destroyed -= UpdaterOnDestroyed;
+            player.Died -= PlayerOnDied;
+        }
+
+        private void UpdaterOnUpdated(float obj)
+        {
+            hud.SetCoordinates(player.Coordinates);
+            hud.SetRotation(player.Rotation);
+            hud.SetSpeed(player.Speed);
+            hud.SetLaserChargesCount(player.Weapon2.CurrentAmmo);
+            hud.SetLaserReloadTime(player.Weapon2.ReloadTime);
         }
         
         private void EnemiesManagerOnEnemyHit(IEnemy obj)
@@ -57,21 +84,15 @@ namespace Gameplay.Level
             pauseScreen.SetScoreValue(currentScore);
         }
 
-        private void BeforeRestartHappened()
-        {
-            pauseScreen.Paused -= PauseScreenOnPaused;
-            pauseScreen.Unpaused -= PauseScreenOnUnpaused;
-            pauseScreen.BeforeRestartHappened -= BeforeRestartHappened;
-            enemiesManager.Disable();
-        }
-
         private void PauseScreenOnUnpaused()
         {
+            hud.Show();
             playerController.IsEnabled = true;
         }
 
         private void PauseScreenOnPaused()
         {
+            hud.Hide();
             playerController.IsEnabled = false;
         }
 
@@ -83,11 +104,12 @@ namespace Gameplay.Level
         
         private async UniTaskVoid WaitForNewCycle()
         {
+            hud.Hide();
             enemiesManager.Disable();
             var tsc = new UniTaskCompletionSource();
             pauseScreen.Show();
-            pauseScreen.SetRestartActive(false);
-            pauseScreen.WaitForResume(tsc);
+            pauseScreen.SetResumeActive(false);
+            pauseScreen.WaitForRestart(tsc);
             await tsc.Task;
             
             RunNewCycle();
@@ -95,7 +117,9 @@ namespace Gameplay.Level
         
         private void RunNewCycle()
         {
+            hud.Show();
             currentScore = 0;
+            pauseScreen.SetScoreValue(currentScore);
             player.Init(shipMono);
             player.Died += PlayerOnDied;
             enemiesManager.StartCycle();

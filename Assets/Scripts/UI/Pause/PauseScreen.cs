@@ -11,7 +11,7 @@ namespace UI.Pause
 
         private IPauseScreenView view;
         private ISceneLoader sceneLoader;
-        private UniTaskCompletionSource resumeTaskCompletionSource;
+        private UniTaskCompletionSource restartTaskCompletionSource;
 
         public event Action Paused = () => { };
         public event Action Unpaused = () => { };
@@ -34,13 +34,13 @@ namespace UI.Pause
             view.SetScoreValue(value);
         }
         
-        public void SetRestartActive(bool isActive)
+        public void SetResumeActive(bool isActive)
         {
-            view.SetRestartActive(isActive);
+            view.SetResumeActive(isActive);
         }
-        public void WaitForResume(UniTaskCompletionSource tsc)
+        public void WaitForRestart(UniTaskCompletionSource tsc)
         {
-            this.resumeTaskCompletionSource = tsc;
+            this.restartTaskCompletionSource = tsc;
         }
 
         private void OnEscape()
@@ -64,6 +64,7 @@ namespace UI.Pause
         {
             BeforeRestartHappened();
             ToNormalSpeed();
+            restartTaskCompletionSource?.TrySetResult();
             sceneLoader.RestartScene();
         }
 
@@ -91,7 +92,6 @@ namespace UI.Pause
             ToNormalSpeed();
             gameIsPaused = false;
             Unpaused();
-            resumeTaskCompletionSource?.TrySetResult();
         }
 
         private static void ToNormalSpeed()

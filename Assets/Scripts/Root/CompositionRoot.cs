@@ -1,5 +1,6 @@
 ﻿using Asteroid.Core.Updater;
 using Asteroid.UI.Controller;
+using Asteroid.UI.GameplayHud;
 using Configurations;
 using Core.Camera;
 using Core.ResourceEnums;
@@ -20,6 +21,7 @@ namespace Core
         private static IUpdater updater;
 
         private static IPauseScreen pauseScreen;
+        private static IGameplayHud gameplayHud;
         private static IUiPlayerInput uiPlayerInput;
 
         private void OnDestroy()
@@ -30,6 +32,7 @@ namespace Core
             updater = null;
             gameCamera = null;
             pauseScreen = null;
+            gameplayHud = null;
             uiPlayerInput = null;
 
             var resManager = GetResourceManager();
@@ -106,6 +109,17 @@ namespace Core
             }
             
             return pauseScreen;
+        }
+
+        public static IGameplayHud GetGameplayHud()
+        {
+            if (gameplayHud == null)
+            {
+                gameplayHud = MonoExtensions.CreateComponent<GameplayHud>();
+                gameplayHud.Init(GetViewFactory());
+            }
+            
+            return gameplayHud;
         }
 
         public static IUiPlayerInput GetUiPlayerInput()

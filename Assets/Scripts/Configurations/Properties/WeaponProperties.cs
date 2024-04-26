@@ -8,12 +8,10 @@ namespace Configurations.Properties
         public float CooldownBetweenShotsTime;
         public EHitTypes HitType; 
         
-        public bool IsEndless;
         public int AmmoSize;
         public float ReloadTime;
 
-        public bool IsToDisappearAfterTime;
-        public float DisappearTime;
+        public bool CannotBeDestroyed;
     }
 
     public enum EWeapon

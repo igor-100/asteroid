@@ -14,9 +14,10 @@ namespace Gameplay
             var resourceManager = CompositionRoot.GetResourceManager();
             var updater = CompositionRoot.GetUpdater();
             var pauseScreen = CompositionRoot.GetPauseScreen();
+            var gameplayHud = CompositionRoot.GetGameplayHud();
             
             var gameplay = new GameplayRoot();
-            gameplay.Init(resourceManager, configuration, gameCamera, updater, pauseScreen);
+            gameplay.Init(resourceManager, configuration, gameCamera, updater, pauseScreen, gameplayHud);
             
             IGameManager gameManager = new GameManager();
             gameManager.Init();

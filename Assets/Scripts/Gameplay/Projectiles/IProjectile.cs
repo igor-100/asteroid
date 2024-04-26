@@ -11,7 +11,6 @@ namespace Asteroid.Gameplay.Projectiles
         event Action<IProjectile> Finished;
 
         void Init(EProjectiles eProjectiles, EHitTypes hitType, Vector2 coordinates, float speed,
-            float angle,
-            Vector2 lookDirection, float disappearTime = 0f);
+            float angle, Vector2 lookDirection, bool cannotBeDestroyed = false);
     }
 }

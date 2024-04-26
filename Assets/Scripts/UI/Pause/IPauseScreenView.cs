@@ -7,6 +7,6 @@ namespace UI.Pause
         public event Action RestartClicked;
 
         void SetScoreValue(int value);
-        void SetRestartActive(bool isActive);
+        void SetResumeActive(bool isActive);
     }
 }

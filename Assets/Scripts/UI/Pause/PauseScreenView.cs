@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
 namespace UI.Pause
 {
     public class PauseScreenView : BaseView, IPauseScreenView
@@ -36,9 +34,9 @@ namespace UI.Pause
             this.scoreValue.text = value.ToString();
         }
 
-        public void SetRestartActive(bool isActive)
+        public void SetResumeActive(bool isActive)
         {
-            restartButton.gameObject.SetActive(isActive);
+            resumeButton.gameObject.SetActive(isActive);
         }
     }
 }

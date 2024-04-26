@@ -7,7 +7,9 @@ namespace Asteroid.Gameplay.Player
     public class Ship : IPlayer
     {
         public Vector2 Coordinates { get; private set; }
-        
+        public float Rotation => rotationAngle;
+        public float Speed => currentSpeed;
+
         private PlayerMono mono;
         
         private float increaseSpeedAcceleration;
@@ -16,8 +18,8 @@ namespace Asteroid.Gameplay.Player
         private float inertiaAcceleration;
         private float maximumSpeed;
 
-        private WeaponModule weaponModule1;
-        private WeaponModule weaponModule2;
+        public IWeaponModule Weapon1 { get; private set;}
+        public IWeaponModule Weapon2 { get; private set;}
         
         private float currentSpeed;
         private Vector2 lookDirection;
@@ -38,8 +40,8 @@ namespace Asteroid.Gameplay.Player
             mono.gameObject.SetActive(true);
             
             var playerProps = configuration.PlayerProperties;
-            weaponModule1 = new(playerProps.Weapon1, configuration.GetWeapon(playerProps.Weapon1));
-            weaponModule2 = new(playerProps.Weapon2, configuration.GetWeapon(playerProps.Weapon2));
+            Weapon1 = new WeaponModule(playerProps.Weapon1, configuration.GetWeapon(playerProps.Weapon1));
+            Weapon2 = new WeaponModule(playerProps.Weapon2, configuration.GetWeapon(playerProps.Weapon2));
             
             Coordinates = Vector2.zero;
             lookDirection = Vector2.up;
@@ -102,8 +104,8 @@ namespace Asteroid.Gameplay.Player
             mono.UpdateRotation(rotationAngle);
         }
         
-        public void TryFireAttack1() => weaponModule1.TryFire(Coordinates, rotationAngle, lookDirection);
-        public void TryFireAttack2() => weaponModule2.TryFire(Coordinates, rotationAngle, lookDirection);
+        public void TryFireAttack1() => Weapon1.TryFire(Coordinates, rotationAngle, lookDirection);
+        public void TryFireAttack2() => Weapon2.TryFire(Coordinates, rotationAngle, lookDirection);
 
         public void Hit(EHitTypes hitTypes)
         {

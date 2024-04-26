@@ -5,7 +5,12 @@ namespace Asteroid.Gameplay.Player
     public interface IPlayer : IHittable
     {
         Vector2 Coordinates { get; }
+        float Rotation { get; }
+        float Speed { get; }
         
+        IWeaponModule Weapon1 { get; }
+        IWeaponModule Weapon2 { get; }
+
         event Action Died;
         
         void Init(PlayerMono playerMono);

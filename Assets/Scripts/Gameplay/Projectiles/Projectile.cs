@@ -13,8 +13,6 @@ namespace Asteroid.Gameplay.Projectiles
     {
         private ProjectileMono mono;
         private readonly IUpdater updater;
-        private bool isToDisappear;
-        private float currentDisappearTime;
         private readonly IResourceManager resourceManager;
 
         private bool isActive;
@@ -22,6 +20,7 @@ namespace Asteroid.Gameplay.Projectiles
         private float speed;
         private Vector2 coordinates;
         private EHitTypes eHitType;
+        private bool cannotBeDestroyed;
 
         public event Action<IProjectile> Finished = (proj) => { };
 
@@ -45,7 +44,6 @@ namespace Asteroid.Gameplay.Projectiles
                 return;
 
             ProcessMove(obj);
-            ProcessDisappear(obj);
         }
         
         private void ProcessMove(float deltaTime)
@@ -54,35 +52,18 @@ namespace Asteroid.Gameplay.Projectiles
             mono.UpdateCoordinates(coordinates);
         }
 
-        private void ProcessDisappear(float obj)
-        {
-            if (!isToDisappear)
-                return;
-
-            currentDisappearTime -= obj;
-            if (currentDisappearTime <= 0)
-            {
-                Finished(this);
-                currentDisappearTime = 0f;
-                isToDisappear = false;
-            }
-        }
-
         public void Init(EProjectiles eProjectiles, EHitTypes hitType, Vector2 coordinates, float speed,
-            float angle, Vector2 lookDirection, float disappearTime = 0f)
+            float angle, Vector2 lookDirection, bool cannotBeDestroyed = false)
         {
             this.coordinates = coordinates;
             this.direction = lookDirection;
             this.speed = speed;
             this.eHitType = hitType;
+            this.cannotBeDestroyed = cannotBeDestroyed;
             
             mono = resourceManager.GetPooledObject<ProjectileMono, EProjectiles>(eProjectiles);
             mono.Collided += MonoOnCollided;
             mono.Init(this.coordinates, angle);
-            
-            isToDisappear = disappearTime > 0;
-            if (isToDisappear)
-                this.currentDisappearTime = disappearTime;
             
             isActive = true;
         }
@@ -92,13 +73,12 @@ namespace Asteroid.Gameplay.Projectiles
             if (col.CompareTag(TagConstants.ENEMY))
             {
                 hittable?.Hit(eHitType);
-                if (!isToDisappear)
+                if (!cannotBeDestroyed)
                     Finished(this);
             }
             if (col.CompareTag(TagConstants.DESTROY_BORDERS))
             {
-                if (!isToDisappear)
-                    Finished(this);
+                Finished(this);
             }
         }
 

@@ -73,14 +73,16 @@ namespace Gameplay.Level
             aliveEnemies = new();
 
             isEnabled = true;
+            cancellationTokenSource = new CancellationTokenSource();
             SpawnEnemies().Forget();
         }
 
         private async UniTaskVoid SpawnEnemies()
         {
-            cancellationTokenSource = new CancellationTokenSource();
             while (isEnabled)
             {
+                if (cancellationTokenSource.IsCancellationRequested)
+                    return;
                 SpawnRandomEnemy();
                 spawnedEnemiesCounter++;
                 if (spawnedEnemiesCounter <= levelProperties.TotalSpawnsToGetToTheFinalLevel)
@@ -140,7 +142,10 @@ namespace Gameplay.Level
                 SpawnEnemy(EEnemies.SmallAsteroid, enemy.Coordinates, firstDir);
                 SpawnEnemy(EEnemies.SmallAsteroid, enemy.Coordinates, -firstDir);
             }
-            EnemyHit(enemy);
+            if (isByPlayer)
+            {
+                EnemyHit(enemy);
+            }
             enemy.GotHit -= EnemyOnHit;
             enemiesPool.Despawn(enemy);
             aliveEnemies.Remove(enemy);
@@ -148,12 +153,21 @@ namespace Gameplay.Level
         
         public void Disable()
         {
-            cancellationTokenSource.Cancel();
-            cancellationTokenSource.Dispose();
+            if (!isEnabled)
+                return;
+            
+            if (cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Cancel();
+                cancellationTokenSource.Dispose();   
+            }
             for (var index = aliveEnemies.Count - 1; index >= 0; index--)
             {
                 var enemy = aliveEnemies[index];
-                enemy.Hit(EHitTypes.Destroy);
+                if (enemy is { IsAlive: true })
+                {
+                    enemy.Hit(EHitTypes.Destroy);
+                }
             }
             isEnabled = false;
         }

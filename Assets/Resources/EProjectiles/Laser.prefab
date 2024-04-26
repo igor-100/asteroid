@@ -73,7 +73,7 @@ Transform:
   m_GameObject: {fileID: 5747659608320719661}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 15, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -125,7 +125,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 0.08, y: 30}
+  m_Size: {x: 0.08, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -145,7 +145,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2890763398096927332, guid: 032485e903bf388409ce297046809f54, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 15
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2890763398096927332, guid: 032485e903bf388409ce297046809f54, type: 3}
       propertyPath: m_LocalPosition.z
@@ -197,7 +197,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9068107242442932388, guid: 032485e903bf388409ce297046809f54, type: 3}
       propertyPath: m_Size.y
-      value: 30
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

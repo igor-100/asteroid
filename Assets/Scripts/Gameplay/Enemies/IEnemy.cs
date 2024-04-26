@@ -8,6 +8,7 @@ namespace Gameplay.Level.Enemies
 {
     public interface IEnemy : IHittable, IPoolable
     {
+        public bool IsAlive { get; }
         public Vector2 Coordinates { get; }
         
         EEnemies EType { get; }

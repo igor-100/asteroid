@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Asteroid.UI.GameplayHud;
+using Core;
 using Core.ResourceEnums;
 using UI.Pause;
 using UnityEngine;
@@ -17,6 +18,8 @@ namespace UI
         
         public IPauseScreenView CreatePauseScreen() =>
             CreateView<IPauseScreenView>(EViews.PauseScreenView, uiRoot.Overlay3Canvas);
+        public IGameplayHudView CreateGameplayHudView() =>
+            CreateView<IGameplayHudView>(EViews.GameplayHudView, uiRoot.MainCanvas);
 
         private T CreateView<T>(EViews eView, Transform viewParent) where T : IView
         {

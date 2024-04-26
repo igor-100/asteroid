@@ -11,7 +11,7 @@ namespace UI.Pause
         event Action BeforeRestartHappened;
         void Init(IUiPlayerInput uiPlayerInput, ISceneLoader sceneLoader, IViewFactory viewFactory);
         void SetScoreValue(int value);
-        void SetRestartActive(bool isActive);
-        void WaitForResume(UniTaskCompletionSource tsc);
+        void SetResumeActive(bool isActive);
+        void WaitForRestart(UniTaskCompletionSource tsc);
     }
 }

@@ -5,6 +5,7 @@ using Asteroid.Gameplay.Player;
 using Configurations.Properties;
 using Constants;
 using Core;
+using Unity.VisualScripting;
 using UnityEngine;
 namespace Gameplay.Level.Enemies
 {
@@ -16,7 +17,7 @@ namespace Gameplay.Level.Enemies
         private EnemyMono enemyMono;
         private readonly IUpdater updater;
         private readonly IResourceManager resourceManager;
-        private bool isActive;
+        public bool IsAlive { get; private set; }
         
         private float speed;
         private Vector2 movementDirection;
@@ -68,7 +69,7 @@ namespace Gameplay.Level.Enemies
 
         private void UpdaterOnUpdated(float obj)
         {
-            if (!isActive)
+            if (!IsAlive)
                 return;
 
             ProcessMove(obj);
@@ -88,12 +89,15 @@ namespace Gameplay.Level.Enemies
             GotHit(this, true, hitTypes);
         }
         
-        public void OnSpawned() => isActive = true;
+        public void OnSpawned() => IsAlive = true;
         public void OnDespawned()
         {
-            enemyMono.Collided -= MonoOnCollided;
-            enemyMono.gameObject.SetActive(false);
-            isActive = false;
+            if (!enemyMono.IsUnityNull())
+            {
+                enemyMono.Collided -= MonoOnCollided;
+                enemyMono.gameObject.SetActive(false);   
+            }
+            IsAlive = false;
         }
     }
 }

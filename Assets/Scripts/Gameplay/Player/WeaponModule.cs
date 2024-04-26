@@ -8,19 +8,22 @@ using Gameplay.Pool;
 using UnityEngine;
 namespace Asteroid.Gameplay.Player
 {
-    public class WeaponModule
+    public class WeaponModule : IWeaponModule
     {
         private IPool<IProjectile> projectilesPool;
         private EGunState gunState;
         private readonly IResourceManager resourceManager;
         
         private readonly WeaponProperties weaponProperties;
-        private bool isEndless;
+        private bool cannotBeDestroyed;
         private float currentCooldownTimer;
         private int currentAmmo;
         private float currentReloadTimer;
         private readonly IUpdater updater;
         private readonly EWeapon eWeapon;
+
+        public int CurrentAmmo => currentAmmo;
+        public float ReloadTime => currentReloadTimer;
 
         public WeaponModule(EWeapon eWeapon, WeaponProperties weaponProperties)
         {
@@ -32,7 +35,7 @@ namespace Asteroid.Gameplay.Player
             gunState = EGunState.ReadyToFire;
             this.weaponProperties = weaponProperties;
             currentAmmo = this.weaponProperties.AmmoSize;
-            isEndless = this.weaponProperties.IsEndless;
+            cannotBeDestroyed = this.weaponProperties.CannotBeDestroyed;
 
             updater.Updated += UpdaterOnUpdated;
             updater.Destroyed += UpdaterOnDestroyed;
@@ -61,6 +64,7 @@ namespace Asteroid.Gameplay.Player
                     {
                         gunState = EGunState.ReadyToFire;
                         currentAmmo = weaponProperties.AmmoSize;
+                        currentReloadTimer = 0f;
                         Debug.Log($"{eWeapon} reloaded!");
                     }
                     break;
@@ -80,20 +84,14 @@ namespace Asteroid.Gameplay.Player
         private void Fire(Vector2 coordinates, float rotationAngle, Vector2 lookDirection)
         {
             var projectile = projectilesPool.Spawn();
-            float disappearTime = 0f;
-            if (weaponProperties.IsToDisappearAfterTime)
-                disappearTime = weaponProperties.DisappearTime;
             projectile.Init(weaponProperties.ProjectilePrefab, weaponProperties.HitType, coordinates, weaponProperties.ProjectileSpeed,
-                rotationAngle, lookDirection, disappearTime);
+                rotationAngle, lookDirection, weaponProperties.CannotBeDestroyed);
             projectile.Finished += ProjectileOnFinished;
-            if (!isEndless)
+            currentAmmo--;
+            if (currentAmmo == 0)
             {
-                currentAmmo--;
-                if (currentAmmo == 0)
-                {
-                    Reload();
-                    return;
-                }
+                Reload();
+                return;
             }
             Cooldown();
         }
