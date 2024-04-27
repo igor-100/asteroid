@@ -1,5 +1,4 @@
-﻿using Asteroid.Gameplay.Player;
-namespace Gameplay.Level
+﻿namespace Gameplay.Level
 {
     public interface IGameManager
     {

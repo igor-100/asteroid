@@ -2,7 +2,6 @@
 using Asteroid.Core.Updater;
 using Asteroid.Gameplay.Projectiles;
 using Configurations.Properties;
-using Core;
 using Gameplay;
 using Gameplay.Pool;
 using UnityEngine;
@@ -12,10 +11,8 @@ namespace Asteroid.Gameplay.Player
     {
         private IPool<IProjectile> projectilesPool;
         private EGunState gunState;
-        private readonly IResourceManager resourceManager;
         
         private readonly WeaponProperties weaponProperties;
-        private bool cannotBeDestroyed;
         private float currentCooldownTimer;
         private int currentAmmo;
         private float currentReloadTimer;
@@ -27,7 +24,6 @@ namespace Asteroid.Gameplay.Player
 
         public WeaponModule(EWeapon eWeapon, WeaponProperties weaponProperties)
         {
-            this.resourceManager = GameplayRoot.ResourceManager;
             updater = GameplayRoot.Updater;
             
             this.eWeapon = eWeapon;
@@ -35,7 +31,6 @@ namespace Asteroid.Gameplay.Player
             gunState = EGunState.ReadyToFire;
             this.weaponProperties = weaponProperties;
             currentAmmo = this.weaponProperties.AmmoSize;
-            cannotBeDestroyed = this.weaponProperties.CannotBeDestroyed;
 
             updater.Updated += UpdaterOnUpdated;
             updater.Destroyed += UpdaterOnDestroyed;

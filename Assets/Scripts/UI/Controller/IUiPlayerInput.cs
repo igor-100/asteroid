@@ -5,7 +5,5 @@ namespace Asteroid.UI.Controller
     public interface IUiPlayerInput
     {
         event Action EscPerformed;
-        
-        bool IsEnabled { get; set; }
     }
 }

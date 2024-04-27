@@ -1,6 +1,5 @@
 ﻿using System;
 using Configurations.Properties;
-using Core;
 using Core.ResourceEnums;
 using Gameplay.Pool;
 using UnityEngine;

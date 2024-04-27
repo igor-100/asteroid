@@ -12,8 +12,6 @@ namespace Asteroid.UI.UI.Controller
         
         private InputAction escAction;
 
-        public bool IsEnabled { get; set; }
-        
         public event Action EscPerformed = () => { }; 
 
         private void Awake()

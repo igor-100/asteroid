@@ -1,7 +1,3 @@
-using System;
-using Asteroid.UI.Controller;
-using Core;
-using Cysharp.Threading.Tasks;
 using UI;
 using UnityEngine;
 namespace Asteroid.UI.GameplayHud
