@@ -51,7 +51,7 @@ namespace Gameplay.Level
             
             RunNewCycle();
             
-            enemiesManager.EnemyHit += EnemiesManagerOnEnemyHit;
+            enemiesManager.EnemyHitByPlayer += EnemiesManagerOnEnemyHitByPlayer;
             pauseScreen.Paused += PauseScreenOnPaused;
             pauseScreen.Unpaused += PauseScreenOnUnpaused;
             updater.Updated += UpdaterOnUpdated;
@@ -61,7 +61,7 @@ namespace Gameplay.Level
         private void UpdaterOnDestroyed()
         {
             enemiesManager.Disable();
-            enemiesManager.EnemyHit -= EnemiesManagerOnEnemyHit;
+            enemiesManager.EnemyHitByPlayer -= EnemiesManagerOnEnemyHitByPlayer;
             pauseScreen.Paused -= PauseScreenOnPaused;
             pauseScreen.Unpaused -= PauseScreenOnUnpaused;
             updater.Updated -= UpdaterOnUpdated;
@@ -78,7 +78,7 @@ namespace Gameplay.Level
             hud.SetLaserReloadTime(player.Weapon2.ReloadTime);
         }
         
-        private void EnemiesManagerOnEnemyHit(IEnemy obj)
+        private void EnemiesManagerOnEnemyHitByPlayer(IEnemy obj)
         {
             currentScore++;
             pauseScreen.SetScoreValue(currentScore);

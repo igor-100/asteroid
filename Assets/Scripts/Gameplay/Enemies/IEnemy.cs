@@ -17,5 +17,6 @@ namespace Gameplay.Level.Enemies
         
         void Init(EEnemies eEnemies, Vector2 coordinates, float speed, float rotationAngle, Vector2 movementDirection = default,
             IPlayer playerToFollow = null);
+        void Disable();
     }
 }

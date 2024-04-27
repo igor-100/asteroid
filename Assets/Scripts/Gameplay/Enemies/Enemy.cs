@@ -89,6 +89,11 @@ namespace Gameplay.Level.Enemies
             GotHit(this, true, hitTypes);
         }
         
+        public void Disable()
+        {
+            GotHit(this, false, EHitTypes.Destroy);
+        }
+        
         public void OnSpawned() => IsAlive = true;
         public void OnDespawned()
         {

@@ -11,6 +11,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 namespace Gameplay.Level
 {
+    //TODO: Potentially could be split onto spawner, repository and manager
     public class EnemiesManagerModule
     {
         private bool isEnabled;
@@ -34,7 +35,7 @@ namespace Gameplay.Level
         private IReadOnlyDictionary<EEnemies,EnemyProperties> enemiesProperites;
         private CancellationTokenSource cancellationTokenSource;
 
-        public event Action<IEnemy> EnemyHit = (enemy) => { };
+        public event Action<IEnemy> EnemyHitByPlayer = (enemy) => { };
 
         public void Init(LevelProperties levelProperties, IReadOnlyDictionary<EEnemies, EnemyProperties> enemiesProperties,
             EdgeCollider2D spawnEdges, Bounds gameBounds, IPlayer player)
@@ -144,7 +145,7 @@ namespace Gameplay.Level
             }
             if (isByPlayer)
             {
-                EnemyHit(enemy);
+                EnemyHitByPlayer(enemy);
             }
             enemy.GotHit -= EnemyOnHit;
             enemiesPool.Despawn(enemy);
@@ -166,7 +167,7 @@ namespace Gameplay.Level
                 var enemy = aliveEnemies[index];
                 if (enemy is { IsAlive: true })
                 {
-                    enemy.Hit(EHitTypes.Destroy);
+                    enemy.Disable();
                 }
             }
             isEnabled = false;

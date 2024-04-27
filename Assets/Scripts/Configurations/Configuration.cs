@@ -37,7 +37,7 @@ namespace Configurations
                 },
                 InitialSpawnDelay = (2f, 4f),
                 TotalSpawnsToGetToTheFinalLevel = 100,
-                FinalSpawnDelay = (0.5f, 1f)
+                FinalSpawnDelay = (0.3f, 0.6f)
             };
 
             weapons = new()
